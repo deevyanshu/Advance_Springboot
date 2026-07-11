@@ -1,0 +1,20 @@
+server:
+  port: 8081
+
+spring:
+    application:
+        name: order
+    datasource:
+      url: jdbc:postgresql://localhost:5432/ecom_db
+      username: ecom_user
+      password: ecom_password
+      jpa:
+        hibernate:
+          ddl-auto: update
+      kafka:
+        bootstrap-servers: localhost:9092
+        producer:
+          key-serializer: org.apache.kafka.common.serialization.StringSerializer
+          value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+          acks: all # Production standard
+
