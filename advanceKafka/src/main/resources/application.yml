@@ -1,0 +1,33 @@
+server:
+  port: 8080
+spring:
+  application:
+    name: advanceKafka
+  datasource:
+    url: jdbc:h2:mem:notificationdb
+    driverClassName: org.h2.Driver
+    username: sa
+    password:
+    jpa:
+      database-platform: org.hibernate.dialect.H2Dialect
+      hibernate:
+        ddl-auto: update
+
+    kafka:
+      # Pointing to our 3-node cluster
+      bootstrap-servers: localhost:9092,localhost:9093,localhost:9094
+      producer:
+        key-serializer: org.apache.kafka.common.serialization.StringSerializer
+        value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      consumer:
+        group-id: "notification-group"
+        auto-offset-reset: earliest
+        key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+        value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+        properties:
+          spring.json.trusted.packages: "*"
+        enable-auto-commit: false
+      listener:
+        # CRITICAL FOR PARTITIONING: Starts 3 concurrent threads to read 3 partitions
+        concurrency: 3
+        ack-mode: manual_immediate
