@@ -1,5 +1,5 @@
 server:
-  port: 8080
+  port: 8081
 spring:
   application:
     name: advanceKafka
@@ -16,16 +16,18 @@ spring:
     kafka:
       # Pointing to our 3-node cluster
       bootstrap-servers: localhost:9092,localhost:9093,localhost:9094
-      producer:
-        key-serializer: org.apache.kafka.common.serialization.StringSerializer
-        value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+#      producer:
+#        key-serializer: org.apache.kafka.common.serialization.StringSerializer
+#        value-serializer: org.springframework.kafka.support.serializer.JacksonJsonSerializer;
       consumer:
-        group-id: "notification-group"
+        group-id: "notification-group-v1"
         auto-offset-reset: earliest
         key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-        value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+        value-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
         properties:
           spring.json.trusted.packages: "*"
+          spring.deserializer.value.delegate.class: org.springframework.kafka.support.serializer.JsonDeserializer
+          spring.json.value.default.type: com.deevyanshu.advancekafka.Model.NotificationRequest
         enable-auto-commit: false
       listener:
         # CRITICAL FOR PARTITIONING: Starts 3 concurrent threads to read 3 partitions

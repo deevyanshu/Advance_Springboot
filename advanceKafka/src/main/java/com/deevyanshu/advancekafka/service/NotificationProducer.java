@@ -5,14 +5,18 @@ import com.deevyanshu.advancekafka.configuration.KafkaConfig;
 import com.deevyanshu.advancekafka.repository.NotificationRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 @Service
-@RequiredArgsConstructor
 @Slf4j
 public class NotificationProducer {
     private final KafkaTemplate<String, Object> kafkaTemplate;
+
+    public NotificationProducer(@Qualifier("customKafka") KafkaTemplate<String, Object> kafkaTemplate) {
+        this.kafkaTemplate = kafkaTemplate;
+    }
 
     public void sendNotification(NotificationRequest request) {
         // IMPORTANT: We use the 'userId' as the Kafka Key.

@@ -16,10 +16,10 @@ public class NotificationController {
 
     private final NotificationProducer producer;
 
-    @PostMapping
+    @PostMapping("/post")
     public ResponseEntity<String> sendBulk(@RequestBody NotificationRequest request) {
-        // Send a burst of 10 messages to see partitions in action
-        for (int i = 1; i <= 10; i++) {
+        // Send a burst of 5 messages to see partitions in action
+        for (int i = 1; i <= 5; i++) {
             NotificationRequest req = new NotificationRequest();
             // Vary the User ID so Kafka hashes them to different partitions
             req.setUserId(request.getUserId() + "_" + i);
